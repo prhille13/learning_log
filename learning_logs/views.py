@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from .forms import TopicForm, EntryForm
-from .models import Topic
+from .models import Topic, Entry
 # Create your views here.
 
 def index(request):
@@ -57,3 +57,11 @@ def new_entry(request, topic_id):
     context = {'topic': topic, 'form': form}
     return render(request, 'learning_logs/new_entry.html', context)
     
+def edit_entry(request, entry_id):
+  """Edit an existing entry."""
+  entry = Entry.objects.get(id=entry_id)
+  topic = entry.topic
+
+  if request.method != 'POST':
+    # Initial request; pre-fill form with the current entry.
+    form = EntryForm
